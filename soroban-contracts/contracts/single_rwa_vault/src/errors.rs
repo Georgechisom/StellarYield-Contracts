@@ -70,8 +70,10 @@ pub enum Error {
     AlreadyApproved = 39,
     /// Threshold must be >= 1 and <= number of signers.
     InvalidThreshold = 40,
-    /// Preview deposit would result in zero shares (dust protection).
-    PreviewZeroShares = 41,
-    /// Preview redeem would result in zero assets (dust protection).
-    PreviewZeroAssets = 42,
+    /// Vault total assets exceeds the funding target during the funding phase.
+    FundingTargetExceeded = 41,
+    /// Amount corresponds to zero shares during preview.
+    PreviewZeroShares = 42,
+    /// Shares correspond to zero assets during preview.
+    PreviewZeroAssets = 43,
 }
