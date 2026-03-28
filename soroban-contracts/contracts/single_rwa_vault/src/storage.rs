@@ -287,17 +287,6 @@ pub fn bump_allowance(e: &Env, owner: &Address, spender: &Address) {
     }
 }
 
-/// Extend the TTL for allowance entries to match balance lifetime thresholds.
-/// Call this whenever allowance data is written or read to prevent silent archival.
-pub fn bump_allowance(e: &Env, owner: &Address, spender: &Address) {
-    let key = DataKey::Allowance(owner.clone(), spender.clone());
-    if e.storage().persistent().has(&key) {
-        e.storage()
-            .persistent()
-            .extend_ttl(&key, BALANCE_LIFETIME_THRESHOLD, BALANCE_BUMP_AMOUNT);
-    }
-}
-
 /// Extend the TTL for all persistent per-user yield/snapshot entries for a
 /// given address and epoch.  Call this any time user data is written so that
 /// no entry can silently expire and cause double-claims or missed payouts.

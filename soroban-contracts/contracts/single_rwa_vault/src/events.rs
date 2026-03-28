@@ -251,4 +251,3 @@ pub fn emit_emergency_executed(e: &Env, proposal_id: u32, recipient: Address, am
         (recipient, amount),
     );
 }
-}

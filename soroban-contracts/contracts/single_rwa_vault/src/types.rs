@@ -198,4 +198,3 @@ pub struct EmergencyProposal {
     pub proposed_at: u64,
     pub executed: bool,
 }
-}

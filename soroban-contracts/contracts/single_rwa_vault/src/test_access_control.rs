@@ -201,6 +201,21 @@ fn test_unpause_resumes_operations() {
 }
 
 #[test]
+#[should_panic(expected = "Error(Contract, #1)")] // NotKYCVerified
+fn test_deposit_without_kyc_fails() {
+    let e = Env::default();
+    e.mock_all_auths();
+    let (vault_id, token_id, _zkme_id, _admin) = make_vault(&e);
+    let vault = SingleRWAVaultClient::new(&e, &vault_id);
+    let user = Address::generate(&e);
+
+    MockTokenClient::new(&e, &token_id).mint(&user, &1_000_000i128);
+
+    // User is intentionally not approved in MockZkme.
+    vault.deposit(&user, &1_000_000i128, &user);
+}
+
+#[test]
 fn test_pause_emits_event_with_reason() {
     let e = Env::default();
     e.mock_all_auths();
@@ -284,4 +299,24 @@ fn test_emergency_withdraw_zero_balance_no_transfer() {
 
     assert_eq!(token.balance(&recipient), 0);
     assert!(vault.paused());
+}
+
+#[test]
+fn test_full_operator_can_clear_blacklist_under_current_design() {
+    let e = Env::default();
+    e.mock_all_auths();
+    let (vault_id, _token_id, _zkme_id, admin) = make_vault(&e);
+    let vault = SingleRWAVaultClient::new(&e, &vault_id);
+    let operator = Address::generate(&e);
+    let user = Address::generate(&e);
+
+    vault.set_blacklisted(&admin, &user, &true);
+    assert!(vault.is_blacklisted(&user));
+
+    // Backward-compatible operator assignment grants the FullOperator superrole,
+    // which currently satisfies ComplianceOfficer checks as well.
+    vault.set_operator(&admin, &operator, &true);
+    vault.set_blacklisted(&operator, &user, &false);
+
+    assert!(!vault.is_blacklisted(&user));
 }

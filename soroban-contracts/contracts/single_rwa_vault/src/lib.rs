@@ -2596,39 +2596,3 @@ mod test {
         client.deposit(&depositor, &10_0000000, &depositor);
     }
 }
-<<<<<<< HEAD
-
-#[cfg(test)]
-mod test_access_control;
-#[cfg(test)]
-mod test_constructor;
-#[cfg(test)]
-mod test_timelock;
-#[cfg(test)]
-pub mod test_helpers;
-#[cfg(test)]
-mod test_rbac;
-#[cfg(test)]
-mod test_redemption;
-#[cfg(test)]
-mod test_withdraw;
-#[cfg(test)]
-mod tests;
-
-#[cfg(test)]
-mod test_freeze_flags;
-
-#[cfg(test)]
-mod test_close_vault;
-#[cfg(test)]
-mod test_constructor_validation;
-#[cfg(test)]
-mod test_deposit_limits;
-#[cfg(test)]
-mod test_overflow;
-#[cfg(test)]
-mod test_rwa_setters;
-#[cfg(test)]
-mod test_token;
-=======
->>>>>>> upstream/main
