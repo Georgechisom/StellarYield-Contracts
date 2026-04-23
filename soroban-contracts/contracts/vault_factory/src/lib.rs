@@ -276,8 +276,9 @@ impl VaultFactory {
             panic_with_error!(e, Error::VaultIsActive);
         }
 
-        // Registry cleanup: remove from asset-specific list
+        // Registry cleanup: remove from asset-specific list and the indexed registry
         remove_from_vaults_by_asset(e, &info.asset, &vault);
+        unregister_vault(e, vault.clone());
 
         // Delete persistent VaultInfo entry
         delete_vault_info(e, &vault);

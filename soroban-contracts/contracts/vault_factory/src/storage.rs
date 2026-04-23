@@ -204,6 +204,40 @@ pub fn register_vault(e: &Env, vault: Address) {
     put_vault_count(e, count + 1);
 }
 
+pub fn unregister_vault(e: &Env, vault: Address) {
+    let count = get_vault_count(e);
+    if count == 0 {
+        return;
+    }
+
+    let mut found_index: Option<u32> = None;
+    for i in 0..count {
+        if let Some(v) = get_vault_at_index(e, i) {
+            if v == vault {
+                found_index = Some(i);
+                break;
+            }
+        }
+    }
+
+    if let Some(index) = found_index {
+        let last_index = count - 1;
+        if index != last_index {
+            // Swap: move the last element to the position of the element being removed
+            if let Some(last_vault) = get_vault_at_index(e, last_index) {
+                let key = DataKey::VaultAtIndex(index);
+                e.storage().persistent().set(&key, &last_vault);
+                bump_persist(e, &key);
+            }
+        }
+        // Pop: remove the last element and decrement the count
+        e.storage()
+            .persistent()
+            .remove(&DataKey::VaultAtIndex(last_index));
+        put_vault_count(e, last_index);
+    }
+}
+
 pub fn get_vault_at_index(e: &Env, index: u32) -> Option<Address> {
     e.storage().persistent().get(&DataKey::VaultAtIndex(index))
 }

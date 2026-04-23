@@ -254,10 +254,11 @@ fn test_vault_count_matches_list_length() {
         inject_vault(&e, &factory_id, true);
     }
 
+    let all = client.get_all_vaults();
     e.as_contract(&factory_id, || {
         assert_eq!(
             get_vault_count(&e) as usize,
-            client.get_all_vaults().len() as usize
+            all.len() as usize
         );
     });
 }
@@ -413,26 +414,30 @@ fn test_remove_inactive_vault_success() {
     let vault = inject_vault(&e, &factory_id, false /* inactive */);
 
     // Pre-conditions
+    let all_pre = client.get_all_vaults();
+    let single_pre = client.get_single_rwa_vaults();
     e.as_contract(&factory_id, || {
         assert!(get_vault_info(&e, &vault).is_some());
-        assert!(client.get_all_vaults().contains(vault.clone()));
-        assert!(client.get_single_rwa_vaults().contains(vault.clone()));
+        assert!(all_pre.contains(vault.clone()));
+        assert!(single_pre.contains(vault.clone()));
     });
 
     client.remove_vault(&admin, &vault);
 
     // Post-conditions: vault purged from all lists and VaultInfo deleted
+    let all_post = client.get_all_vaults();
+    let single_post = client.get_single_rwa_vaults();
     e.as_contract(&factory_id, || {
         assert!(
             get_vault_info(&e, &vault).is_none(),
             "VaultInfo must be deleted"
         );
         assert!(
-            !client.get_all_vaults().contains(vault.clone()),
+            !all_post.contains(vault.clone()),
             "vault must not appear in AllVaults"
         );
         assert!(
-            !client.get_single_rwa_vaults().contains(vault.clone()),
+            !single_post.contains(vault.clone()),
             "vault must not appear in SingleRwaVaults"
         );
     });
