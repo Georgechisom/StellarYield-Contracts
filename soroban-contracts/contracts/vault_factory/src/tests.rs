@@ -719,8 +719,7 @@ fn test_mixed_vault_types_registry_filtering() {
     let single_rwa_vault = inject_vault(&e, &factory_id, true);
 
     // Inject a stub Aggregator vault entry directly into the registry.
-    // TODO: replace this manual injection with a real factory call once
-    //       `create_aggregator_vault` is implemented.
+    // Replace this with a real factory call once aggregator deployment exists.
     let aggregator_vault = Address::generate(&e);
     let aggregator_info = crate::types::VaultInfo {
         vault: aggregator_vault.clone(),

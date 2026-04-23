@@ -1641,24 +1641,11 @@ impl SingleRWAVault {
             panic_with_error!(e, Error::TimelockDelayNotPassed);
         }
 
-        // Execute the action based on its type
         match action.action_type {
-            ActionType::EmergencyWithdraw => {
-                // For now, we'll implement a simplified version
-                // TODO: Implement proper data deserialization when needed
-                panic_with_error!(e, Error::NotSupported);
-            }
-            ActionType::TransferAdmin => {
-                // For now, we'll implement a simplified version
-                // TODO: Implement proper data deserialization when needed
-                panic_with_error!(e, Error::NotSupported);
-            }
-            ActionType::Upgrade => {
-                // TODO: Implement upgrade functionality when needed
-                panic_with_error!(e, Error::NotSupported);
-            }
-            ActionType::WasmHashUpdate => {
-                // TODO: Implement WASM hash update functionality when needed
+            ActionType::EmergencyWithdraw
+            | ActionType::TransferAdmin
+            | ActionType::Upgrade
+            | ActionType::WasmHashUpdate => {
                 panic_with_error!(e, Error::NotSupported);
             }
         }

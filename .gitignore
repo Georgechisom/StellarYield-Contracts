@@ -79,6 +79,7 @@ coverage/
 *.log
 *.tmp
 *.bak
+**/check_output.txt
 
 issue.md
 pr.md
